@@ -88,4 +88,4 @@ After reboot, all of these should pass:
 
 | Date | Target | Snapshot | Result | Notes |
 |---|---|---|---|---|
-| _pending_ | SD card | | | Run before cutover |
+| _deferred_ | SD card | | | Skipped before cutover 09/11/2026; still to do |
