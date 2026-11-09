@@ -29,9 +29,13 @@ Date: 09/11/2026. Detection downtime about 9 minutes (17:17:50 to 17:26).
 
 Power the Pi 4, move the sound card back, `sudo systemctl enable --now birdnet-go fugleramme-frame birdnet-clips-to-nas.timer birdnet-db-snapshot.timer birdnet-crosscheck.timer`, disable the same on the Pi 5, and repoint pi-0-frame. Detections made on the Pi 5 since cutover would not be in the Pi 4's DB.
 
+## Post-cutover changes (09/11/2026, 17:33)
+
+- Clip retention changed from `usage` 80% to `age` 30d (`config.yaml` backed up as `config.yaml.bak-20261109`).
+- BirdNET-Go upgraded and re-pinned to the 31/10/2026 build (`sha256:5eebc826...`). DB snapshot taken first: `db-snapshot/birdnet.db.pre-upgrade-20261109`. Capture confirmed running after restart.
+- Pi 4 migration key removed from the Pi 5's `authorized_keys`. Rollback to the Pi 4 is no longer a supported path (the upgraded DB may not open on the older build).
+
 ## Open items
 
-- Clip retention is `usage` at 80%, which on the Pi 5 means 80% of the 1.8 TB system disk. Change to `age` 30d or a lower cap.
 - Test restore to an SD card (see RESTORE.md).
-- Remove the Pi 4 migration key from the Pi 5's `authorized_keys` once rollback is no longer wanted.
-- Upgrade BirdNET-Go from the pinned image.
+- Pi 4 private key `~/.ssh/id_ed25519` remains on the powered-off Pi 4; harmless now its public half is removed.
