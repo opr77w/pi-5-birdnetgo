@@ -1,0 +1,4 @@
+proc            /proc           proc    defaults          0       0
+PARTUUID=b4b27ade-01  /boot/firmware  vfat    defaults          0       2
+PARTUUID=b4b27ade-02  /               ext4    defaults,noatime  0       1
+UUID=538271c7-b62f-4871-8f64-92a575e99e95  /mnt/birdnet-go/external  ext4  defaults,noatime,nofail,x-systemd.device-timeout=10  0  2

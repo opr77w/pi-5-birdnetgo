@@ -1,0 +1,2 @@
+pi ALL=(ALL) NOPASSWD: ALL
+Defaults:pi verifypw = any

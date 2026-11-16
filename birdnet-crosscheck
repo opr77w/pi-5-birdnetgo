@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""Weekly cross-check of BirdNET-Go detections against nearby BirdWeather stations (added 08/11/2026).
+
+Read-only: queries the local BirdNET-Go API and BirdWeather's public GraphQL API; changes nothing.
+Writes a markdown report to /srv/birdnet-go-app/reports/ and sends a short summary via pi-notify.
+  suspect = species detected here that no other nearby station logged in the same 7 days
+  missing = species in the area's top 20 that were not detected here
+"""
+import datetime as dt, json, os, subprocess, sys, urllib.parse, urllib.request
+import re, yaml
+
+def norm(name):
+    """Common-name key: BirdNET-Go and BirdWeather differ on some scientific names (Coloeus/Corvus monedula) and hyphens (Woodpigeon/Wood-Pigeon)."""
+    return re.sub(r"[^a-z]", "", (name or "").lower())
+
+CFG = "/srv/birdnet-go-app/config/config.yaml"
+OUT = "/srv/birdnet-go-app/reports"
+LOCAL = "http://localhost:8080"
+GQL = "https://app.birdweather.com/graphql"
+DAYS, BOX_LAT, BOX_LON, TOP_N = 7, 0.16, 0.25, 20   # box ~ +/-18 km N-S, +/-17 km E-W
+IGNORE_STATIONS = {"31891"}  # this garden's retired first BirdWeather station (BirdNET-Pi-opr), kept for its history (08/11/2026)
+
+def notify(level, title, msg):
+    if os.environ.get("CROSSCHECK_NO_NOTIFY"): return
+    subprocess.run(["/usr/local/sbin/pi-notify", level, title, msg], check=False)
+
+def get(url, data=None, timeout=30):
+    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"} if data else {})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.load(r)
+
+def gql(q):
+    d = get(GQL, json.dumps({"query": q}).encode())
+    if d.get("errors"): raise RuntimeError(d["errors"])
+    return d["data"]
+
+def main():
+    c = yaml.safe_load(open(CFG))
+    lat, lon = c["birdnet"]["latitude"], c["birdnet"]["longitude"]
+    token = c.get("realtime", {}).get("birdweather", {}).get("id") or ""
+    own_id = None
+    if token:
+        try: own_id = str(get(f"https://app.birdweather.com/api/v1/stations/{token}")["id"])
+        except Exception: pass
+    today = dt.date.today(); start = today - dt.timedelta(days=DAYS)
+    # local species summary
+    qs = urllib.parse.urlencode({"start_date": start.isoformat(), "end_date": today.isoformat()})
+    local = {r["scientific_name"]: r for r in get(f"{LOCAL}/api/v2/analytics/species/summary?{qs}")}
+    # nearby active stations, excluding this one
+    ne, sw = f"{{lat:{lat+BOX_LAT},lon:{lon+BOX_LON}}}", f"{{lat:{lat-BOX_LAT},lon:{lon-BOX_LON}}}"
+    st = gql(f"{{ stations(ne:{ne}, sw:{sw}, first:50){{ nodes {{ id name latestDetectionAt }} }} }}")["stations"]["nodes"]
+    cutoff = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=DAYS)).isoformat()
+    active = [s for s in st if s["id"] != own_id and s["id"] not in IGNORE_STATIONS and (s.get("latestDetectionAt") or "") >= cutoff[:10]]
+    if not active: raise RuntimeError("no active nearby BirdWeather stations in the last 7 days")
+    near = {}
+    for s in active:
+        q = f'{{ station(id:"{s["id"]}"){{ topSpecies(period:{{count:{DAYS}, unit:"day"}}, limit:200){{ count species {{ commonName scientificName }} }} }} }}'
+        for r in gql(q)["station"]["topSpecies"] or []:
+            sp = r["species"]; e = near.setdefault(sp["scientificName"], {"common": sp["commonName"], "count": 0, "stations": 0})
+            e["count"] += r["count"]; e["stations"] += 1
+    near_by_common = {norm(v["common"]): v for v in near.values()}
+    def near_for(k, r): return near.get(k) or near_by_common.get(norm(r["common_name"]))
+    local_common = {norm(r["common_name"]) for r in local.values()}
+    suspects = sorted((r for k, r in local.items() if not near_for(k, r)), key=lambda r: -r["count"])
+    top = sorted(near.items(), key=lambda kv: -kv[1]["count"])[:TOP_N]
+    missing = [(k, v) for k, v in top if k not in local and norm(v["common"]) not in local_common]
+    # rarity for suspects (BirdNET-Go's own location-based estimate)
+    for r in suspects:
+        try: r["rarity"] = get(f"{LOCAL}/api/v2/species?" + urllib.parse.urlencode({"scientific_name": r["scientific_name"]}))["rarity"]["status"]
+        except Exception: r["rarity"] = "?"
+    # report
+    os.makedirs(OUT, exist_ok=True)
+    fn = f"{OUT}/crosscheck-{today.isoformat()}.md"
+    L = [f"# BirdNET cross-check, {start:%d/%m/%Y} to {today:%d/%m/%Y}", "",
+         f"This station: **{sum(r['count'] for r in local.values())} detections, {len(local)} species**. "
+         f"Nearby ({len(active)} active BirdWeather stations within about 17 km): "
+         f"**{sum(v['count'] for v in near.values())} detections, {len(near)} species**.", "",
+         f"Nearby stations: {', '.join(s['name'] for s in active)}.", "",
+         f"## Suspect: detected here, not by any nearby station ({len(suspects)})", ""]
+    if suspects:
+        L += ["| Species | Detections | Max conf | Avg conf | Local rarity |", "| --- | --- | --- | --- | --- |"]
+        L += [f"| {r['common_name']} (*{r['scientific_name']}*) | {r['count']} | {r['max_confidence']:.2f} | {r['avg_confidence']:.2f} | {r['rarity']} |" for r in suspects]
+    else: L += ["None."]
+    L += ["", f"## Missing: in the area's top {TOP_N}, not detected here ({len(missing)})", ""]
+    if missing:
+        L += ["| Species | Nearby detections | Stations |", "| --- | --- | --- |"]
+        L += [f"| {v['common']} (*{k}*) | {v['count']} | {v['stations']} |" for k, v in missing]
+    else: L += ["None."]
+    L += ["", f"## This station, all species", "", "| Species | Detections | Max conf | Nearby detections |", "| --- | --- | --- | --- |"]
+    L += [f"| {r['common_name']} | {r['count']} | {r['max_confidence']:.2f} | {(near_for(k, r) or {}).get('count', 0)} |" for k, r in sorted(local.items(), key=lambda kv: -kv[1]['count'])]
+    L += ["", f"Generated {dt.datetime.now():%d/%m/%Y %H:%M} by birdnet-crosscheck on {os.uname().nodename}. Suspects are prompts to listen to clips, not verdicts: a genuine rarity or night flyover can be absent nearby."]
+    open(fn, "w").write("\n".join(L) + "\n")
+    latest = f"{OUT}/latest.md"
+    if os.path.lexists(latest): os.remove(latest)
+    os.symlink(os.path.basename(fn), latest)
+    s = ", ".join(f"{r['common_name']} ({r['count']})" for r in suspects[:6]) or "none"
+    m = ", ".join(v["common"] for _, v in missing[:6]) or "none"
+    notify("ok", f"BirdNET weekly cross-check", f"Suspect: {s}. Missing: {m}. {len(local)} species here vs {len(near)} nearby. Report: {fn}")
+    print(f"birdnet-crosscheck: ok, {len(suspects)} suspect, {len(missing)} missing, report {fn}")
+
+try: main()
+except Exception as e:
+    print(f"birdnet-crosscheck: FAILED: {e}", file=sys.stderr)
+    notify("fail", "BirdNET cross-check FAILED", str(e)[:300]); sys.exit(1)

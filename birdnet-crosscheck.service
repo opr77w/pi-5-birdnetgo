@@ -1,0 +1,8 @@
+[Unit]
+Description=BirdNET weekly cross-check against nearby BirdWeather stations
+After=network-online.target birdnet-go.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/birdnet-crosscheck

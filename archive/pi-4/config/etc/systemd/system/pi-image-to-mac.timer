@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly check: send weekly Pi image to the Mac when due and reachable
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily BirdNET clips copy to the DiskStation
+
+[Timer]
+OnCalendar=*-*-* 03:30
+RandomizedDelaySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

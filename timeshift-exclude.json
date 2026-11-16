@@ -1,0 +1,15 @@
+[
+  "+ /root/.**",
+  "+ /home/pi/.**",
+  "/mnt/birdnet-go/**",
+  "/mnt/netbackup/**",
+  "/var/cache/**",
+  "/srv/birdnet-go-app/data/birdnet.db",
+  "/srv/birdnet-go-app/data/birdnet.db-wal",
+  "/srv/birdnet-go-app/data/birdnet.db-shm",
+  "/srv/birdnet-go-app/data/cache/**",
+  "/srv/birdnet-go-app/data/clips/**",
+  "/srv/birdnet-go-app/data/logs/**",
+  "/srv/birdnet-go-app/config/hls/**",
+  "/srv/birdnet-go-app/lost+found"
+]

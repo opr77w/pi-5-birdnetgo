@@ -1,0 +1,9 @@
+[Unit]
+Description=Weekly BirdNET cross-check (Monday 07:40)
+
+[Timer]
+OnCalendar=Mon *-*-* 07:40
+Persistent=true
+
+[Install]
+WantedBy=timers.target

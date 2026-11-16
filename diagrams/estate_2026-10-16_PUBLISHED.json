@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "title": "Home Pi estate after 16/10/2026: BirdNET node, bird frame, UPS shutdown and backups",
+    "family": "system topology",
+    "status": "PUBLISHED",
+    "date": "2026-10-16",
+    "paired_with": null,
+    "footer": "Personal project \u00b7 pi-4-birdnet"
+  },
+  "canvas": {
+    "width": 1620,
+    "height": 1000
+  },
+  "containers": [
+    {
+      "id": "house",
+      "label": "Indoors \u00b7 LAN 192.168.4.0/22 \u00b7 eero reservations",
+      "x": 48,
+      "y": 110,
+      "w": 300,
+      "h": 740
+    },
+    {
+      "id": "netutil",
+      "label": "pi-4-netutil \u00b7 Pi 4 8 GB \u00b7 SSD boot \u00b7 192.168.4.227 \u00b7 NUT primary, backups, notifications",
+      "x": 400,
+      "y": 110,
+      "w": 560,
+      "h": 440
+    },
+    {
+      "id": "birdnet",
+      "label": "pi-4-birdnet \u00b7 Pi 4B 4 GB \u00b7 PoE \u00b7 192.168.4.37 \u00b7 capture + inference in one box",
+      "x": 1010,
+      "y": 110,
+      "w": 560,
+      "h": 440
+    },
+    {
+      "id": "power",
+      "label": "Power \u00b7 Eaton 3S 550 UPS feeds everything below",
+      "x": 400,
+      "y": 580,
+      "w": 560,
+      "h": 270
+    },
+    {
+      "id": "frame",
+      "label": "pi-0-frame \u00b7 Pi Zero 2 W \u00b7 192.168.4.52 \u00b7 frame only",
+      "x": 1010,
+      "y": 580,
+      "w": 560,
+      "h": 270
+    }
+  ],
+  "nodes": [
+    {
+      "id": "mac",
+      "label": "MacBook Air \u00b7 192.168.4.34",
+      "sublabel": "~/PiBackups/<host>/ \u00b7 receive.sh",
+      "category": "pine",
+      "x": 80,
+      "y": 160,
+      "w": 236,
+      "h": 70,
+      "shape": "rect"
+    },
+    {
+      "id": "fleet",
+      "label": "pi-fleet MCP (Claude)",
+      "sublabel": "ssh as pi to netutil, pi-5, birdnet, frame",
+      "category": "slate",
+      "x": 80,
+      "y": 260,
+      "w": 236,
+      "h": 70,
+      "shape": "rect"
+    },
+    {
+      "id": "ha",
+      "label": "Home Assistant Green",
+      "sublabel": "webhook 'Pi backup - notify' \u00b7 NUT client",
+      "category": "stone",
+      "x": 80,
+      "y": 360,
+      "w": 236,
+      "h": 70,
+      "shape": "rect"
+    },
+    {
+      "id": "phone",
+      "label": "iPhone TTW17",
+      "sublabel": "backup ok/fail \u00b7 power out/restore",
+      "category": "stone",
+      "x": 80,
+      "y": 460,
+      "w": 236,
+      "h": 60,
+      "shape": "pill"
+    },
+    {
+      "id": "dropbox",
+      "label": "Dropbox",
+      "sublabel": "rclone sync, 15 min (existing)",
+      "category": "stone",
+      "x": 80,
+      "y": 560,
+      "w": 236,
+      "h": 60,
+      "shape": "rect"
+    },
+    {
+      "id": "mains",
+      "label": "Mains",
+      "sublabel": "",
+      "category": "stone",
+      "x": 80,
+      "y": 680,
+      "w": 236,
+      "h": 50,
+      "shape": "pill"
+    },
+    {
+      "id": "nutp",
+      "label": "NUT primary \u00b7 upsd :3493",
+      "sublabel": "low battery 25% \u00b7 FSD \u00b7 HOSTSYNC 30 s",
+      "category": "ochre",
+      "x": 420,
+      "y": 160,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "notify",
+      "label": "pi-notify",
+      "sublabel": "POST HA webhook: ok / warn / fail",
+      "category": "pine",
+      "x": 690,
+      "y": 160,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "clone",
+      "label": "rpi-clone SSD \u2192 SD",
+      "sublabel": "nightly 03:30 \u00b7 bootable failover",
+      "category": "pine",
+      "x": 420,
+      "y": 250,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "img1",
+      "label": "pi-image-to-mac",
+      "sublabel": "weekly zstd image of the SD \u00b7 sha256",
+      "category": "pine",
+      "x": 690,
+      "y": 250,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "disks",
+      "label": "WD 240 GB SSD + SD card",
+      "sublabel": "root on SSD \u00b7 SD = nightly clone",
+      "category": "stone",
+      "x": 420,
+      "y": 340,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "rclone",
+      "label": "rclone Dropbox sync",
+      "sublabel": "one-way + bisync timers (existing)",
+      "category": "stone",
+      "x": 690,
+      "y": 340,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "argon",
+      "label": "Argon ONE case \u00b7 jumper 2-3",
+      "sublabel": "always on: boots when power returns",
+      "category": "stone",
+      "x": 690,
+      "y": 430,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "mic",
+      "label": "Clippy EM272M mic",
+      "sublabel": "mono \u00b7 plug-in power \u00b7 3.5 mm",
+      "category": "plum",
+      "x": 1030,
+      "y": 160,
+      "w": 250,
+      "h": 56,
+      "shape": "pill"
+    },
+    {
+      "id": "cm108",
+      "label": "CM108 USB sound card",
+      "sublabel": "ALSA card 0 pinned \u00b7 AGC off \u00b7 +23 dB",
+      "category": "plum",
+      "x": 1300,
+      "y": 160,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "bng",
+      "label": "BirdNET-Go \u00b7 Docker \u00b7 :8080",
+      "sublabel": "50.89, 0.45 \u00b7 FP filter 2 \u00b7 overlap 2.2",
+      "category": "plum",
+      "x": 1030,
+      "y": 250,
+      "w": 250,
+      "h": 62,
+      "shape": "rect",
+      "emphasis": true
+    },
+    {
+      "id": "stick",
+      "label": "Integral 64 GB USB stick",
+      "sublabel": "ext4 \u2192 /external/clips \u00b7 FLAC",
+      "category": "plum",
+      "x": 1300,
+      "y": 250,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "fug1",
+      "label": "Fugleramme web-only \u00b7 :8081",
+      "sublabel": "reads the local API \u00b7 kiosk + admin",
+      "category": "plum",
+      "x": 1030,
+      "y": 340,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "nuts",
+      "label": "NUT secondary",
+      "sublabel": "eaton@192.168.4.227 \u00b7 halts on FSD",
+      "category": "ochre",
+      "x": 1300,
+      "y": 340,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "img2",
+      "label": "pi-image-to-mac",
+      "sublabel": "weekly \u00b7 stops birdnet-go ~16 min",
+      "category": "pine",
+      "x": 1030,
+      "y": 430,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "sd2",
+      "label": "32 GB SD card (root)",
+      "sublabel": "Pi OS desktop 64-bit \u00b7 db + config",
+      "category": "stone",
+      "x": 1300,
+      "y": 430,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "ups",
+      "label": "Eaton 3S 550 UPS",
+      "sublabel": "USB to netutil \u00b7 off 45 s \u00b7 on 60 s",
+      "category": "ochre",
+      "x": 420,
+      "y": 630,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "switch",
+      "label": "PoE switch \u00b7 eero \u00b7 HA Green",
+      "sublabel": "all on the UPS \u00b7 PoE \u2192 birdnet",
+      "category": "ochre",
+      "x": 690,
+      "y": 630,
+      "w": 250,
+      "h": 62,
+      "shape": "rect"
+    },
+    {
+      "id": "seq",
+      "label": "Low-battery sequence",
+      "sublabel": "1 birdnet halts \u00b7 2 netutil waits 30 + 60 s, halts \u00b7 3 Eaton cuts output 45 s later \u00b7 4 mains back: all boot",
+      "category": "stone",
+      "x": 420,
+      "y": 730,
+      "w": 520,
+      "h": 80,
+      "shape": "rect"
+    },
+    {
+      "id": "fug2",
+      "label": "Fugleramme frame-only",
+      "sublabel": "install.sh -y \u00b7 detector = birdnet:8080",
+      "category": "plum",
+      "x": 1030,
+      "y": 630,
+      "w": 250,
+      "h": 62,
+      "shape": "rect",
+      "status": "risk"
+    },
+    {
+      "id": "inky",
+      "label": "Inky Impression panel",
+      "sublabel": "13.3\" or 7.3\" Spectra 6 \u00b7 SPI \u00b7 not bought",
+      "category": "plum",
+      "x": 1300,
+      "y": 630,
+      "w": 250,
+      "h": 62,
+      "shape": "rect",
+      "status": "risk"
+    },
+    {
+      "id": "frame_note",
+      "label": "Pending",
+      "sublabel": "Zero dropped off the LAN after the installer's reboot; verify, then finish the panel",
+      "category": "stone",
+      "x": 1030,
+      "y": 730,
+      "w": 520,
+      "h": 70,
+      "shape": "rect"
+    }
+  ],
+  "edges": [
+    {
+      "from": "mic",
+      "to": "cm108",
+      "kind": "solid",
+      "label": null
+    },
+    {
+      "from": "cm108",
+      "to": "bng",
+      "kind": "solid",
+      "label": null
+    },
+    {
+      "from": "bng",
+      "to": "stick",
+      "kind": "solid",
+      "label": "clips"
+    },
+    {
+      "from": "bng",
+      "to": "fug1",
+      "kind": "solid",
+      "label": "API"
+    },
+    {
+      "from": "bng",
+      "to": "fug2",
+      "kind": "solid",
+      "label": "API over LAN"
+    },
+    {
+      "from": "fug2",
+      "to": "inky",
+      "kind": "exit",
+      "label": "SPI"
+    },
+    {
+      "from": "ups",
+      "to": "nutp",
+      "kind": "solid",
+      "label": "USB"
+    },
+    {
+      "from": "nutp",
+      "to": "nuts",
+      "kind": "solid",
+      "label": "FSD"
+    },
+    {
+      "from": "mains",
+      "to": "ups",
+      "kind": "solid",
+      "label": null
+    },
+    {
+      "from": "ups",
+      "to": "switch",
+      "kind": "solid",
+      "label": "power"
+    },
+    {
+      "from": "switch",
+      "to": "sd2",
+      "kind": "exit",
+      "label": "PoE"
+    },
+    {
+      "from": "nutp",
+      "to": "ha",
+      "kind": "exit",
+      "label": "power alerts"
+    },
+    {
+      "from": "clone",
+      "to": "disks",
+      "kind": "solid",
+      "label": null
+    },
+    {
+      "from": "img1",
+      "to": "mac",
+      "kind": "solid",
+      "label": "weekly, over ssh"
+    },
+    {
+      "from": "img2",
+      "to": "mac",
+      "kind": "solid",
+      "label": "weekly, over ssh"
+    },
+    {
+      "from": "notify",
+      "to": "ha",
+      "kind": "solid",
+      "label": "webhook"
+    },
+    {
+      "from": "ha",
+      "to": "phone",
+      "kind": "solid",
+      "label": null
+    },
+    {
+      "from": "rclone",
+      "to": "dropbox",
+      "kind": "exit",
+      "label": null
+    }
+  ],
+  "legend": [
+    {
+      "category": "plum",
+      "text": "bird pipeline: capture, inference, frame"
+    },
+    {
+      "category": "pine",
+      "text": "backups and notifications"
+    },
+    {
+      "category": "ochre",
+      "text": "power and UPS shutdown"
+    },
+    {
+      "category": "slate",
+      "text": "admin access"
+    },
+    {
+      "category": "stone",
+      "text": "existing / external"
+    }
+  ]
+}

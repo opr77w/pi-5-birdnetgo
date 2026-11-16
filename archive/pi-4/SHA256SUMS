@@ -1,0 +1,13 @@
+# Argon40 files as downloaded 06/11/2026 from https://download.argon40.com/ (scripts/ path except argon1.sh)
+# Installed: argononed.py, argonregister.py, argonsysinfo.py -> /etc/argon/
+#            argonpowerbutton-libgpiod.py -> /etc/argon/argonpowerbutton.py
+#            argononed.service -> /etc/systemd/system/
+#            argon-shutdown.sh -> /usr/lib/systemd/system-shutdown/
+# argon1.sh (the vendor installer) was reviewed, NOT run.
+77f2bf2f24e7ee1735d0b6f225bbbf17bac5677399b25adf921faecfe2dadc60  argon1.sh
+fe0df8e7613e7958537176c18e87bbc8d0277b2a182686e8feb3082c438437e2  argononed.py
+14d44370b59e6b46d601a0fb455b07da36b1af1c84b2089427b7c83ba6c0ddc9  argonpowerbutton-libgpiod.py
+0aceb338a1e567a91c2de4317ac3c57f674e245f4120525a4195fcda0167c04b  argonregister.py
+0e5a1f70d11267f09c20b8fde1bb5dc44c3e49f1f912a4b2df238ba080723e4c  argonsysinfo.py
+812ad6776b705b338e2831cda0fce74627104a12461569993bbf3e45bde9af5c  argononed.service
+7917dc3c2c9a9a2efc0358956f491bac2ea0fbd1577926e07f1b5149b6f19499  argon-shutdown.sh

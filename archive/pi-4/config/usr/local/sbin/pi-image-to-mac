@@ -1,0 +1,64 @@
+#!/bin/bash
+# Weekly bare-metal image of pi-4-birdnet, sent to Toby's MacBook over SSH.
+# Added 16/10/2026, adapted from pi-4-netutil. This Pi boots from the SD card and has no
+# clone disk, so the image is taken from the LIVE root with birdnet-go stopped for the
+# duration (its SQLite DB is on the SD). The clips stick (/mnt/birdnet-go/external) is not imaged.
+# Runs hourly; only sends if the last good send is older than MAX_AGE and the Mac is
+# reachable. The Mac side is a forced command (receive.sh pi-4-birdnet) taking "put" or "sha".
+set -uo pipefail
+MAC_HOST=192.168.4.34
+MAC_USER=ttw
+KEY=/root/.ssh/pi-image-backup_ed25519
+SRC=/dev/mmcblk0
+SVC=birdnet-go
+STATE=/var/lib/pi-image-backup
+MAX_AGE=$((7*24*3600))
+WARN_AGE=$((10*24*3600))
+FORCE=${1:-}
+log(){ echo "pi-image-to-mac: $*"; }
+notify(){ /usr/local/sbin/pi-notify "$@" || true; }
+stopped=0
+restart_svc(){ if [ "$stopped" = 1 ]; then systemctl start "$SVC" && log "$SVC restarted"; stopped=0; fi; }
+trap restart_svc EXIT
+fail(){ log "$1"; notify fail "Pi image backup FAILED" "$1"; exit 1; }
+ssh_mac(){ ssh -i "$KEY" -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=30 "$MAC_USER@$MAC_HOST" "$@"; }
+stale_check(){
+  if [ "$age" -ge "$WARN_AGE" ]; then
+    lw=$(cat "$STATE/last_warn" 2>/dev/null || echo 0)
+    if [ $(( $(date +%s) - lw )) -ge 86400 ]; then
+      if [ "$last" -eq 0 ]; then d="never"; else d="$(( age / 86400 )) days ago"; fi
+      notify warn "Pi image backup overdue" "Last good image: $d. $1"
+      date +%s > "$STATE/last_warn"
+    fi
+  fi
+}
+
+last=$(cat "$STATE/last_success" 2>/dev/null || echo 0)
+age=$(( $(date +%s) - last ))
+if [ "$FORCE" != "--force" ] && [ "$age" -lt "$MAX_AGE" ]; then exit 0; fi
+[ -b "$SRC" ] || fail "No SD card device, so there is nothing to image."
+if ! timeout 5 bash -c "</dev/tcp/$MAC_HOST/22" 2>/dev/null; then
+  log "Mac not reachable; will retry next hour"
+  stale_check "MacBook ($MAC_HOST) not reachable; it sends automatically next time it's home and awake."
+  exit 0
+fi
+
+log "stopping $SVC for a consistent image"
+systemctl stop "$SVC" && stopped=1; sync; sleep 2
+log "sending image of $SRC to $MAC_HOST (last good send ${age}s ago)"
+start=$(date +%s)
+zstd -q -T0 -3 -c < "$SRC" | tee >(sha256sum | cut -d' ' -f1 > "$STATE/.sha.local") >(wc -c > "$STATE/.bytes") | ssh_mac put
+rc=("${PIPESTATUS[@]}"); wait
+restart_svc
+if [ "${rc[0]}" != 0 ] || [ "${rc[1]}" != 0 ] || [ "${rc[2]}" != 0 ]; then
+  stale_check "Last attempt failed."
+  fail "Transfer to the MacBook failed (zstd=${rc[0]} tee=${rc[1]} ssh=${rc[2]}). Will retry next hour."
+fi
+sleep 1
+local_sha=$(cat "$STATE/.sha.local"); remote_sha=$(ssh_mac sha | awk '{print $1}')
+[ -n "$local_sha" ] && [ "$local_sha" = "$remote_sha" ] || fail "Checksum mismatch after transfer (Pi ${local_sha:0:12}, Mac ${remote_sha:0:12}). The Mac's previous.img.zst is the last good image."
+secs=$(( $(date +%s) - start )); bytes=$(cat "$STATE/.bytes" 2>/dev/null || echo 0)
+date +%s > "$STATE/last_success"; echo "$local_sha" > "$STATE/last_sha256"; echo "$bytes" > "$STATE/last_bytes"; rm -f "$STATE/last_warn"
+gb=$(awk -v b="$bytes" 'BEGIN{printf "%.1f", b/1e9}')
+log "done in ${secs}s, ${gb} GB, sha256 $local_sha"
+notify ok "Pi image sent to MacBook" "pi-4-birdnet: ${gb} GB in $(( (secs+59)/60 )) min, $SVC down for that long. Checksum verified (${local_sha:0:12})."

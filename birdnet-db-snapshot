@@ -1,0 +1,16 @@
+#!/bin/bash
+# Consistent copy of the live BirdNET-Go SQLite DB for Timeshift (added 06/11/2026).
+# Runs 11:45 daily, ahead of the 12:00 Timeshift snapshot. The live birdnet.db/-wal/-shm
+# are excluded from Timeshift; this snapshot is included.
+set -uo pipefail
+HOST=$(hostname -s)
+SRC=/srv/birdnet-go-app/data/birdnet.db; DIR=/srv/birdnet-go-app/db-snapshot; OUT=$DIR/birdnet.db
+notify(){ /usr/local/sbin/pi-notify "$@" || true; }
+fail(){ echo "birdnet-db-snapshot: $1"; notify fail "BirdNET DB snapshot FAILED ($HOST)" "$1"; exit 1; }
+mountpoint -q /srv/birdnet-go-app || fail "/srv/birdnet-go-app not mounted (USB stick missing?)."
+[ -f "$SRC" ] || fail "No DB at $SRC."
+install -d -o 1000 -g 1000 -m 700 "$DIR"
+sqlite3 "$SRC" ".timeout 30000" ".backup '$OUT.tmp'" || fail "sqlite3 .backup failed."
+[ "$(sqlite3 "$OUT.tmp" 'PRAGMA integrity_check;')" = ok ] || fail "Integrity check failed on snapshot."
+chown 1000:1000 "$OUT.tmp"; mv -f "$OUT.tmp" "$OUT"
+echo "birdnet-db-snapshot: ok $(stat -c %s "$OUT") bytes"

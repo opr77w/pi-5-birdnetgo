@@ -1,0 +1,48 @@
+[Unit]
+Description=BirdNET-Go
+After=docker.service
+Requires=docker.service
+RequiresMountsFor=/home/pi/birdnet-go-app/config/hls
+
+[Service]
+Restart=always
+# Remove any existing birdnet-go container to prevent name conflicts
+ExecStartPre=-/usr/bin/docker rm -f birdnet-go
+# Create tmpfs mount for HLS segments
+ExecStartPre=/bin/mkdir -p /home/pi/birdnet-go-app/config/hls
+# Mount tmpfs, the '|| true' ensures it doesn't fail if already mounted
+ExecStartPre=/bin/sh -c 'mount -t tmpfs -o size=50M,mode=0755,uid=1000,gid=1000,noexec,nosuid,nodev tmpfs /home/pi/birdnet-go-app/config/hls || true'
+# Prepare external media mount point and ensure shared propagation for hot-plug.
+# These steps are best-effort (prefixed with '-'): the service still starts if
+# they fail; only hot-plug sub-mount propagation is affected.
+# The external mount is always added to the docker run command so the app can
+# detect and guide the user when external media is present or absent.
+ExecStartPre=-/bin/mkdir -p /mnt/birdnet-go/external
+ExecStartPre=-/bin/sh -c 'mountpoint -q /mnt/birdnet-go/external || mount --bind /mnt/birdnet-go/external /mnt/birdnet-go/external'
+ExecStartPre=-/bin/sh -c 'mount --make-rshared /mnt/birdnet-go/external'
+# Make the mount point writable by the container user so the app and the
+# upcoming backup feature can write to external media. -h avoids dereferencing
+# a symlink. Best-effort like the steps above.
+ExecStartPre=-/bin/chown -h 1000:1000 /mnt/birdnet-go/external
+# Disable WiFi power saving on Raspberry Pi to prevent connection drops
+ExecStartPre=/bin/bash -c 'for interface in /sys/class/net/wlan* /sys/class/net/wlp*; do if [ -d "$interface" ]; then iface=$(basename "$interface"); (command -v iwconfig >/dev/null 2>&1 && iwconfig "$iface" power off 2>/dev/null) || (command -v iw >/dev/null 2>&1 && iw dev "$iface" set power_save off 2>/dev/null) || true; fi; done'
+ExecStart=/usr/bin/docker run --rm \
+    --name birdnet-go \
+    -p 8080:8080 \
+    --env TZ="Europe/London" \
+    --env BIRDNET_UID=1000 \
+    --env BIRDNET_GID=1000 \
+    --device /dev/snd \
+    -v /home/pi/birdnet-go-app/config:/config \
+    -v /home/pi/birdnet-go-app/data:/data \
+    -v /sys/class/thermal:/sys/class/thermal \
+    -v /run/avahi-daemon:/run/avahi-daemon:ro \
+    -v /run/dbus:/run/dbus:ro \
+    -v /mnt/birdnet-go/external:/external:rslave \
+    ghcr.io/tphakala/birdnet-go:latest
+# Cleanup tasks on stop
+ExecStopPost=/bin/sh -c 'umount -f /home/pi/birdnet-go-app/config/hls || true'
+ExecStopPost=-/usr/bin/docker rm -f birdnet-go
+
+[Install]
+WantedBy=multi-user.target

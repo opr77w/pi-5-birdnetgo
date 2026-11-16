@@ -1,0 +1,171 @@
+<svg viewBox="0 0 1620 1000" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Home Pi estate after 16/10/2026: BirdNET node, bird frame, UPS shutdown and backups</title>
+<defs>
+  <style type="text/css"><![CDATA[
+    .ground{fill:#FFFFFF;}
+    .container{fill:#F8F9FB;stroke:#D5D9E0;stroke-width:1;}
+    .surface{fill:#FFFFFF;stroke:#D5D9E0;stroke-width:1;}
+    .cat-plum{fill:#EEF2FF;stroke:#4F46E5;stroke-width:1.25;}
+    .cat-pine{fill:#ECFDF5;stroke:#059669;stroke-width:1.25;}
+    .cat-slate{fill:#ECFEFF;stroke:#0891B2;stroke-width:1.25;}
+    .cat-ochre{fill:#FFFBEB;stroke:#D97706;stroke-width:1.25;}
+    .cat-stone{fill:#F3F4F6;stroke:#6B7280;stroke-width:1.25;}
+    .accent{fill:#1F2937;stroke:none;}
+    .st-done{fill:#16A34A;}.st-risk{fill:#DC2626;}.st-blocked{fill:#991B1B;}
+    .line-solid{stroke:#111827;stroke-width:2.5;fill:none;}
+    .leader-exit{stroke:#9CA3AF;stroke-width:2;stroke-dasharray:4 3;fill:none;}
+    .leader-feedback{stroke:#9CA3AF;stroke-width:2;stroke-dasharray:2 2;fill:none;}
+    .title{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:22px;font-weight:700;fill:#111827;}
+    .heading{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;fill:#111827;}
+    .label{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;fill:#111827;}
+    .sublabel{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:11px;font-weight:400;fill:#6B7280;}
+    .caption{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:11px;font-style:italic;fill:#6B7280;}
+    .legend{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:10px;fill:#6B7280;}
+    .meta{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:11px;font-weight:400;fill:#9CA3AF;}
+    .meta-draft{font-weight:600;fill:#1F2937;}.meta-published{font-weight:600;fill:#16A34A;}
+    .footer{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:11px;font-weight:400;fill:#6B7280;}
+    .mono{font-family:'SF Mono',Menlo,monospace;font-size:11px;fill:#111827;}
+    .on-plum{fill:#3730A3;}.on-pine{fill:#059669;}.on-slate{fill:#155E75;}
+    .on-ochre{fill:#92400E;}.on-stone{fill:#1F2937;}.on-accent{fill:#FFFFFF;}
+  ]]></style>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#111827"/></marker>
+  <marker id="arrow-leader" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker>
+</defs>
+<rect class="ground" x="0" y="0" width="1620" height="1000"/>
+<text class="title" x="48" y="56">Home Pi estate after 16/10/2026: BirdNET node, bird frame, UPS shutdown and backups</text>
+<text class="meta" x="48" y="78">system topology  ·  <tspan class="meta-published">PUBLISHED</tspan>  ·  2026-10-16</text>
+<rect class="container" x="48" y="110" width="300" height="740" rx="14"/>
+<text class="heading" x="64" y="134">Indoors · LAN 192.168.4.0/22 · eero reservations</text>
+<rect class="container" x="400" y="110" width="560" height="440" rx="14"/>
+<text class="heading" x="416" y="134">pi-4-netutil · Pi 4 8 GB · SSD boot · 192.168.4.227 · NUT primary, backups, notifications</text>
+<rect class="container" x="1010" y="110" width="560" height="440" rx="14"/>
+<text class="heading" x="1026" y="134">pi-4-birdnet · Pi 4B 4 GB · PoE · 192.168.4.37 · capture + inference in one box</text>
+<rect class="container" x="400" y="580" width="560" height="270" rx="14"/>
+<text class="heading" x="416" y="604">Power · Eaton 3S 550 UPS feeds everything below</text>
+<rect class="container" x="1010" y="580" width="560" height="270" rx="14"/>
+<text class="heading" x="1026" y="604">pi-0-frame · Pi Zero 2 W · 192.168.4.52 · frame only</text>
+<line class="line-solid" x1="1280.0" y1="189.38888888888889" x2="1300.0" y2="189.61111111111111" marker-end="url(#arrow)"/>
+<line class="line-solid" x1="1332.0" y1="222.0" x2="1248.0" y2="250.0" marker-end="url(#arrow)"/>
+<line class="line-solid" x1="1280.0" y1="281.0" x2="1300.0" y2="281.0" marker-end="url(#arrow)"/>
+<text class="caption" x="1288.0" y="275.0" text-anchor="middle">clips</text>
+<line class="line-solid" x1="1155.0" y1="312.0" x2="1155.0" y2="340.0" marker-end="url(#arrow)"/>
+<text class="caption" x="1155.0" y="317.2" text-anchor="middle">API</text>
+<line class="line-solid" x1="1155.0" y1="312.0" x2="1155.0" y2="630.0" marker-end="url(#arrow)"/>
+<text class="caption" x="1155.0" y="433.2" text-anchor="middle">API over LAN</text>
+<line class="leader-exit" x1="1280.0" y1="661.0" x2="1300.0" y2="661.0" marker-end="url(#arrow-leader)"/>
+<text class="caption" x="1288.0" y="655.0" text-anchor="middle">SPI</text>
+<line class="line-solid" x1="545.0" y1="630.0" x2="545.0" y2="222.0" marker-end="url(#arrow)"/>
+<text class="caption" x="545.0" y="460.79999999999995" text-anchor="middle">USB</text>
+<line class="line-solid" x1="670.0" y1="216.5681818181818" x2="1300.0" y2="345.4318181818182" marker-end="url(#arrow)"/>
+<text class="caption" x="922.0" y="262.1136363636364" text-anchor="middle">FSD</text>
+<line class="line-solid" x1="316.0" y1="690.0374639769452" x2="420.0" y2="676.850144092219" marker-end="url(#arrow)"/>
+<line class="line-solid" x1="670.0" y1="661.0" x2="690.0" y2="661.0" marker-end="url(#arrow)"/>
+<text class="caption" x="678.0" y="655.0" text-anchor="middle">power</text>
+<line class="leader-exit" x1="909.55" y1="630.0" x2="1330.45" y2="492.0" marker-end="url(#arrow-leader)"/>
+<text class="caption" x="1077.91" y="568.8" text-anchor="middle">PoE</text>
+<line class="leader-exit" x1="492.26960784313724" y1="222.0" x2="257.53431372549016" y2="360.0" marker-end="url(#arrow-leader)"/>
+<text class="caption" x="398.37549019607843" y="271.2" text-anchor="middle">power alerts</text>
+<line class="line-solid" x1="545.0" y1="312.0" x2="545.0" y2="340.0" marker-end="url(#arrow)"/>
+<line class="line-solid" x1="690.0" y1="263.5769854132901" x2="316.0" y2="211.44732576985413" marker-end="url(#arrow)"/>
+<text class="caption" x="540.4" y="236.72512155591573" text-anchor="middle">weekly, over ssh</text>
+<line class="line-solid" x1="1043.46992481203" y1="430.0" x2="316.0" y2="227.79832810867293" marker-end="url(#arrow)"/>
+<text class="caption" x="752.4819548872181" y="343.11933124346916" text-anchor="middle">weekly, over ssh</text>
+<line class="line-solid" x1="721.2401960784314" y1="222.0" x2="303.8578431372549" y2="360.0" marker-end="url(#arrow)"/>
+<text class="caption" x="554.2872549019608" y="271.2" text-anchor="middle">webhook</text>
+<line class="line-solid" x1="198.0" y1="430.0" x2="198.0" y2="460.0" marker-end="url(#arrow)"/>
+<line class="leader-exit" x1="727.662100456621" y1="402.0" x2="282.52054794520546" y2="560.0" marker-end="url(#arrow-leader)"/>
+<rect class="cat-pine" x="80" y="160" width="236" height="70" rx="12"/>
+<text class="label on-pine" x="198.0" y="193.0" text-anchor="middle">MacBook Air · 192.168.4.34</text>
+<text class="sublabel on-pine" x="198.0" y="211.0" text-anchor="middle" opacity="0.85">~/PiBackups/&lt;host&gt;/ · receive.sh</text>
+<rect class="cat-slate" x="80" y="260" width="236" height="70" rx="12"/>
+<text class="label on-slate" x="198.0" y="293.0" text-anchor="middle">pi-fleet MCP (Claude)</text>
+<text class="sublabel on-slate" x="198.0" y="311.0" text-anchor="middle" opacity="0.85">ssh as pi to netutil, pi-5, birdnet, frame</text>
+<rect class="cat-stone" x="80" y="360" width="236" height="70" rx="12"/>
+<text class="label on-stone" x="198.0" y="393.0" text-anchor="middle">Home Assistant Green</text>
+<text class="sublabel on-stone" x="198.0" y="411.0" text-anchor="middle" opacity="0.85">webhook &#x27;Pi backup - notify&#x27; · NUT client</text>
+<rect class="cat-stone" x="80" y="460" width="236" height="60" rx="30.0"/>
+<text class="label on-stone" x="198.0" y="488.0" text-anchor="middle">iPhone TTW17</text>
+<text class="sublabel on-stone" x="198.0" y="506.0" text-anchor="middle" opacity="0.85">backup ok/fail · power out/restore</text>
+<rect class="cat-stone" x="80" y="560" width="236" height="60" rx="12"/>
+<text class="label on-stone" x="198.0" y="588.0" text-anchor="middle">Dropbox</text>
+<text class="sublabel on-stone" x="198.0" y="606.0" text-anchor="middle" opacity="0.85">rclone sync, 15 min (existing)</text>
+<rect class="cat-stone" x="80" y="680" width="236" height="50" rx="25.0"/>
+<text class="label on-stone" x="198.0" y="710.0" text-anchor="middle">Mains</text>
+<rect class="cat-ochre" x="420" y="160" width="250" height="62" rx="12"/>
+<text class="label on-ochre" x="545.0" y="189.0" text-anchor="middle">NUT primary · upsd :3493</text>
+<text class="sublabel on-ochre" x="545.0" y="207.0" text-anchor="middle" opacity="0.85">low battery 25% · FSD · HOSTSYNC 30 s</text>
+<rect class="cat-pine" x="690" y="160" width="250" height="62" rx="12"/>
+<text class="label on-pine" x="815.0" y="189.0" text-anchor="middle">pi-notify</text>
+<text class="sublabel on-pine" x="815.0" y="207.0" text-anchor="middle" opacity="0.85">POST HA webhook: ok / warn / fail</text>
+<rect class="cat-pine" x="420" y="250" width="250" height="62" rx="12"/>
+<text class="label on-pine" x="545.0" y="279.0" text-anchor="middle">rpi-clone SSD → SD</text>
+<text class="sublabel on-pine" x="545.0" y="297.0" text-anchor="middle" opacity="0.85">nightly 03:30 · bootable failover</text>
+<rect class="cat-pine" x="690" y="250" width="250" height="62" rx="12"/>
+<text class="label on-pine" x="815.0" y="279.0" text-anchor="middle">pi-image-to-mac</text>
+<text class="sublabel on-pine" x="815.0" y="297.0" text-anchor="middle" opacity="0.85">weekly zstd image of the SD · sha256</text>
+<rect class="cat-stone" x="420" y="340" width="250" height="62" rx="12"/>
+<text class="label on-stone" x="545.0" y="369.0" text-anchor="middle">WD 240 GB SSD + SD card</text>
+<text class="sublabel on-stone" x="545.0" y="387.0" text-anchor="middle" opacity="0.85">root on SSD · SD = nightly clone</text>
+<rect class="cat-stone" x="690" y="340" width="250" height="62" rx="12"/>
+<text class="label on-stone" x="815.0" y="369.0" text-anchor="middle">rclone Dropbox sync</text>
+<text class="sublabel on-stone" x="815.0" y="387.0" text-anchor="middle" opacity="0.85">one-way + bisync timers (existing)</text>
+<rect class="cat-stone" x="690" y="430" width="250" height="62" rx="12"/>
+<text class="label on-stone" x="815.0" y="459.0" text-anchor="middle">Argon ONE case · jumper 2-3</text>
+<text class="sublabel on-stone" x="815.0" y="477.0" text-anchor="middle" opacity="0.85">always on: boots when power returns</text>
+<rect class="cat-plum" x="1030" y="160" width="250" height="56" rx="28.0"/>
+<text class="label on-plum" x="1155.0" y="186.0" text-anchor="middle">Clippy EM272M mic</text>
+<text class="sublabel on-plum" x="1155.0" y="204.0" text-anchor="middle" opacity="0.85">mono · plug-in power · 3.5 mm</text>
+<rect class="cat-plum" x="1300" y="160" width="250" height="62" rx="12"/>
+<text class="label on-plum" x="1425.0" y="189.0" text-anchor="middle">CM108 USB sound card</text>
+<text class="sublabel on-plum" x="1425.0" y="207.0" text-anchor="middle" opacity="0.85">ALSA card 0 pinned · AGC off · +23 dB</text>
+<rect class="accent" x="1030" y="250" width="250" height="62" rx="12"/>
+<text class="label on-accent" x="1155.0" y="279.0" text-anchor="middle">BirdNET-Go · Docker · :8080</text>
+<text class="sublabel on-accent" x="1155.0" y="297.0" text-anchor="middle" opacity="0.85">50.89, 0.45 · FP filter 2 · overlap 2.2</text>
+<rect class="cat-plum" x="1300" y="250" width="250" height="62" rx="12"/>
+<text class="label on-plum" x="1425.0" y="279.0" text-anchor="middle">Integral 64 GB USB stick</text>
+<text class="sublabel on-plum" x="1425.0" y="297.0" text-anchor="middle" opacity="0.85">ext4 → /external/clips · FLAC</text>
+<rect class="cat-plum" x="1030" y="340" width="250" height="62" rx="12"/>
+<text class="label on-plum" x="1155.0" y="369.0" text-anchor="middle">Fugleramme web-only · :8081</text>
+<text class="sublabel on-plum" x="1155.0" y="387.0" text-anchor="middle" opacity="0.85">reads the local API · kiosk + admin</text>
+<rect class="cat-ochre" x="1300" y="340" width="250" height="62" rx="12"/>
+<text class="label on-ochre" x="1425.0" y="369.0" text-anchor="middle">NUT secondary</text>
+<text class="sublabel on-ochre" x="1425.0" y="387.0" text-anchor="middle" opacity="0.85">eaton@192.168.4.227 · halts on FSD</text>
+<rect class="cat-pine" x="1030" y="430" width="250" height="62" rx="12"/>
+<text class="label on-pine" x="1155.0" y="459.0" text-anchor="middle">pi-image-to-mac</text>
+<text class="sublabel on-pine" x="1155.0" y="477.0" text-anchor="middle" opacity="0.85">weekly · stops birdnet-go ~16 min</text>
+<rect class="cat-stone" x="1300" y="430" width="250" height="62" rx="12"/>
+<text class="label on-stone" x="1425.0" y="459.0" text-anchor="middle">32 GB SD card (root)</text>
+<text class="sublabel on-stone" x="1425.0" y="477.0" text-anchor="middle" opacity="0.85">Pi OS desktop 64-bit · db + config</text>
+<rect class="cat-ochre" x="420" y="630" width="250" height="62" rx="12"/>
+<text class="label on-ochre" x="545.0" y="659.0" text-anchor="middle">Eaton 3S 550 UPS</text>
+<text class="sublabel on-ochre" x="545.0" y="677.0" text-anchor="middle" opacity="0.85">USB to netutil · off 45 s · on 60 s</text>
+<rect class="cat-ochre" x="690" y="630" width="250" height="62" rx="12"/>
+<text class="label on-ochre" x="815.0" y="659.0" text-anchor="middle">PoE switch · eero · HA Green</text>
+<text class="sublabel on-ochre" x="815.0" y="677.0" text-anchor="middle" opacity="0.85">all on the UPS · PoE → birdnet</text>
+<rect class="cat-stone" x="420" y="730" width="520" height="80" rx="12"/>
+<text class="label on-stone" x="680.0" y="768.0" text-anchor="middle">Low-battery sequence</text>
+<text class="sublabel on-stone" x="680.0" y="786.0" text-anchor="middle" opacity="0.85">1 birdnet halts · 2 netutil waits 30 + 60 s, halts · 3 Eaton cuts output 45 s later · 4 mains back: all boot</text>
+<rect class="cat-plum" x="1030" y="630" width="250" height="62" rx="12"/>
+<rect class="st-risk" x="1030" y="636" width="5" height="50" rx="2.5"/>
+<text class="label on-plum" x="1155.0" y="659.0" text-anchor="middle">Fugleramme frame-only</text>
+<text class="sublabel on-plum" x="1155.0" y="677.0" text-anchor="middle" opacity="0.85">install.sh -y · detector = birdnet:8080</text>
+<rect class="cat-plum" x="1300" y="630" width="250" height="62" rx="12"/>
+<rect class="st-risk" x="1300" y="636" width="5" height="50" rx="2.5"/>
+<text class="label on-plum" x="1425.0" y="659.0" text-anchor="middle">Inky Impression panel</text>
+<text class="sublabel on-plum" x="1425.0" y="677.0" text-anchor="middle" opacity="0.85">13.3&quot; or 7.3&quot; Spectra 6 · SPI · not bought</text>
+<rect class="cat-stone" x="1030" y="730" width="520" height="70" rx="12"/>
+<text class="label on-stone" x="1290.0" y="763.0" text-anchor="middle">Pending</text>
+<text class="sublabel on-stone" x="1290.0" y="781.0" text-anchor="middle" opacity="0.85">Zero dropped off the LAN after the installer&#x27;s reboot; verify, then finish the panel</text>
+<text class="legend" x="48" y="922">Legend</text>
+<rect class="cat-plum" x="48" y="932" width="14" height="14" rx="3"/>
+<text class="caption" x="68" y="944">bird pipeline: capture, inference, frame</text>
+<rect class="cat-pine" x="382" y="932" width="14" height="14" rx="3"/>
+<text class="caption" x="402" y="944">backups and notifications</text>
+<rect class="cat-ochre" x="611" y="932" width="14" height="14" rx="3"/>
+<text class="caption" x="631" y="944">power and UPS shutdown</text>
+<rect class="cat-slate" x="819" y="932" width="14" height="14" rx="3"/>
+<text class="caption" x="839" y="944">admin access</text>
+<rect class="cat-stone" x="957" y="932" width="14" height="14" rx="3"/>
+<text class="caption" x="977" y="944">existing / external</text>
+<text class="footer" x="48" y="972">Personal project · pi-4-birdnet · estate_2026-10-16_PUBLISHED.svg · 2026-10-16</text>
+</svg>

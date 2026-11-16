@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly image of the SD card to Toby's MacBook over SSH (stops birdnet-go while imaging)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flock /run/lock/pi-image.lock /usr/local/sbin/pi-image-to-mac
+Nice=10
+IOSchedulingClass=idle

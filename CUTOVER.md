@@ -34,6 +34,7 @@ Power the Pi 4, move the sound card back, `sudo systemctl enable --now birdnet-g
 - Clip retention changed from `usage` 80% to `age` 30d (`config.yaml` backed up as `config.yaml.bak-20261109`).
 - BirdNET-Go upgraded and re-pinned to the 31/10/2026 build (`sha256:5eebc826...`). DB snapshot taken first: `db-snapshot/birdnet.db.pre-upgrade-20261109`. Capture confirmed running after restart.
 - Pi 4 migration key removed from the Pi 5's `authorized_keys`. Rollback to the Pi 4 is no longer a supported path (the upgraded DB may not open on the older build).
+- Audio levels measured (clips peak -24 to -43 dBFS, no clipping); gain left as is. Sound card Auto Gain Control turned off at 17:57 and stored with `alsactl store` (capture stays at 35/35, +23 dB; software gain 12 dB). Review after 24 h against AGC-on days.
 
 ## Open items
 

@@ -1,0 +1,17 @@
+#!/bin/bash
+# Nightly mirror of BirdNET-Go clips (USB stick) to NetBackup on the DiskStation (added 06/11/2026).
+# Mirror: the NAS copy follows BirdNET-Go's 30-day retention.
+set -uo pipefail
+HOST=$(hostname -s)
+SRC=/mnt/birdnet-go/external/clips; MNT=/mnt/netbackup; DEST=$MNT/birdnet-clips; STATE=/var/lib/pi-nas-backup
+notify(){ /usr/local/sbin/pi-notify "$@" || true; }
+fail(){ echo "birdnet-clips-to-nas: $1"; notify fail "BirdNET clips copy FAILED ($HOST)" "$1"; exit 1; }
+mkdir -p "$STATE"
+mountpoint -q /mnt/birdnet-go/external || fail "USB stick not mounted."
+timeout 30 stat -t "$MNT/." >/dev/null 2>&1 || fail "NetBackup share on the DiskStation not reachable."
+mkdir -p "$DEST" || fail "Cannot create $DEST on the NAS."
+start=$(date +%s)
+rsync -rlt --delete "$SRC/" "$DEST/"; rc=$?
+[ "$rc" = 0 ] || [ "$rc" = 24 ] || fail "rsync exited $rc."
+date +%s > "$STATE/clips_last_success"
+echo "birdnet-clips-to-nas: done in $(( $(date +%s) - start ))s"

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Push a notification to Toby's phone via an HA webhook automation ("Pi backup - notify").
+# Usage: pi-notify <ok|fail|warn> "<title>" "<message>"   (added 16/10/2026, copied from pi-4-netutil)
+set -u
+. /etc/pi-notify.conf
+level=${1:-ok}; title=${2:-$(hostname)}; msg=${3:-}
+payload=$(python3 -c 'import json,sys;print(json.dumps({"level":sys.argv[1],"title":sys.argv[2],"message":sys.argv[3],"host":sys.argv[4]}))' "$level" "$title" "$msg" "$(hostname)")
+curl -fsS -m 15 -X POST -H 'Content-Type: application/json' -d "$payload" "$HA_WEBHOOK_URL" >/dev/null || echo "pi-notify: webhook post failed" >&2

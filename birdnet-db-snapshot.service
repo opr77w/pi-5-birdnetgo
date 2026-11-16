@@ -1,0 +1,8 @@
+[Unit]
+Description=BirdNET DB snapshot for Timeshift
+After=network-online.target srv-birdnet\x2dgo\x2dapp.mount
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/birdnet-db-snapshot
